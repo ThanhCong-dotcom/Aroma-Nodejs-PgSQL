@@ -1,6 +1,6 @@
-let controller = {}
-let models = require('../models')
-let Product = models.Product
+const controller = {}
+const models = require('../models')
+const Product = models.Product
 
 controller.getTrendingProducts = () => {
     return new Promise((resolve, reject) => {
@@ -11,6 +11,22 @@ controller.getTrendingProducts = () => {
                         ['overallReview', 'DESC']
                     ],
                     limit: 8,
+                    Include: [{ models: models.Category }],
+                    attributes: ['id', 'name', 'price', 'imagepath']
+                }
+            )
+            .then(data => resolve(data))
+            .catch(error => reject(new Error(error)))
+    })
+}
+
+
+controller.getAll = () => {
+    return new Promise((resolve, reject) => {
+        Product
+            .findAll(
+                {
+
                     Include: [{ models: models.Category }],
                     attributes: ['id', 'name', 'price', 'imagepath']
                 }
