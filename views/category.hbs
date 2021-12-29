@@ -19,8 +19,9 @@
                 <ul>
                   {{#each categories}}
                   <li class="filter-list">
-                    <input class="pixel-radio" type="radio" id="men" name="brand">
-                    <label for="men">{{name}}<span> ({{Products.length}})</span></label>
+                    <input class="pixel-radio" type="radio" id="category{{id}}" name="brand">
+                    <label onclick="selectParam('category',{{id}})" for="category{{id}}">{{name}}<span>
+                        ({{Products.length}})</span></label>
                   </li>
                   {{/each}}
                 </ul>
@@ -43,7 +44,7 @@
           </div>
           <div class="common-filter">
             <div class="head">Color</div>
-            <form action="#">
+            <form action="#" method="post">
               <ul>
                 {{#each colors}}
                 <li class="filter-list"><input class="pixel-radio" type="radio" id="black" name="color"><label
@@ -111,7 +112,7 @@
                 </div>
                 <div class="card-body">
                   <p>{{Category.name}}</p>
-                  <h4 class="card-product__title"><a href="#">{{name}}</a></h4>
+                  <h4 class="card-product__title"><a href="/products/{{id}}">{{name}}</a></h4>
                   <p class="card-product__price">${{price}}</p>
                 </div>
               </div>
@@ -269,3 +270,10 @@
   </div>
 </section>
 <!-- ================ Subscribe section end ================= -->
+<script>
+  function selectParam(key, value) {
+    let url = `/products?${key}=${value}`
+    location.href = url
+  }
+
+</script>
