@@ -12,6 +12,14 @@ router.get('/', (req, res, next) => {
     if (!req.query.color || isNaN(req.query.color)) {
         req.query.color = 0
     }
+    if (!req.query.min || isNaN(req.query.min)) {
+        req.query.min = 0
+    }
+    if (!req.query.max || isNaN(req.query.max)) {
+        req.query.max = 100
+    }
+
+
     let categoryController = require('../controllers/categoryController')
     categoryController
         .getAll()

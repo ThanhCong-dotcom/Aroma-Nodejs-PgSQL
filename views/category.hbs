@@ -1,3 +1,7 @@
+<script src="/vendors/nouislider/nouislider.min.js"></script>
+
+
+
 <!-- ================ start banner area ================= -->
 {{>banner}}
 <!-- ================ end banner area ================= -->
@@ -19,8 +23,8 @@
                 <ul>
                   {{#each categories}}
                   <li class="filter-list">
-                    <input class="pixel-radio" type="radio" id="category{{id}}" name="brand">
-                    <label onclick="selectParam('category',{{id}})" for="category{{id}}">{{name}}<span>
+                    <input class="pixel-radio" type="radio" id="category{{id}}" name="category">
+                    <label onclick="selectParam('category',{{id}},true)" for="category{{id}}">{{name}}<span>
                         ({{Products.length}})</span></label>
                   </li>
                   {{/each}}
@@ -36,8 +40,9 @@
             <form action="#">
               <ul>
                 {{#each brands}}
-                <li class="filter-list"><input class="pixel-radio" type="radio" id="apple" name="brand"><label
-                    for="apple">{{name}}<span>({{Products.length}})</span></label></li>
+                <li class="filter-list"><input class="pixel-radio" type="radio" id="brand{{id}}" name="brand"
+                    onclick="selectParam('brand',{{id}})"><label
+                    for="brand{{id}}">{{name}}<span>({{Products.length}})</span></label></li>
                 {{/each}}
               </ul>
             </form>
@@ -47,8 +52,9 @@
             <form action="#" method="post">
               <ul>
                 {{#each colors}}
-                <li class="filter-list"><input class="pixel-radio" type="radio" id="black" name="color"><label
-                    for="black">{{name}}<span>({{ProductColors.length}})</span></label></li>
+                <li class="filter-list"><input class="pixel-radio" type="radio" id="color{{id}}" name="color"
+                    onclick="selectParam('color',{{id}})"><label
+                    for="color{{id}}">{{name}}<span>({{ProductColors.length}})</span></label></li>
                 {{/each}}
               </ul>
             </form>
@@ -270,10 +276,40 @@
   </div>
 </section>
 <!-- ================ Subscribe section end ================= -->
+
+
 <script>
-  function selectParam(key, value) {
-    let url = `/products?${key}=${value}`
+  let urlParam = new URLSearchParams(location.search)
+  let params = {
+    category: 0,
+    brand: 0,
+    color: 0,
+    min: 0,
+    max: 100
+  }
+  for (let key in params) { //check luon co params on URL
+    if (!urlParam.has(key)) {
+      urlParam.append(key, params[key])
+    }
+  }
+  for (let key in params) {
+    let control = $(`#${key}${urlParam.get(key)}`)
+    if (control) {
+      $(control).prop('checked', true)
+    }
+  }
+
+  function selectParam(key, value, reset = false) {
+
+    urlParam.set(key, value)
+    let url = `/products?${urlParam.toString()}`
     location.href = url
   }
 
 </script>
+{{!--
+if (reset === true) {
+for (let key in params) {
+urlParam.set(key, params[key])
+}
+} --}}

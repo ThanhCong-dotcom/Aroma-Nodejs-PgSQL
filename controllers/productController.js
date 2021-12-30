@@ -1,7 +1,8 @@
 const controller = {}
 const models = require('../models')
 const Product = models.Product
-
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op
 controller.getTrendingProducts = () => {
     return new Promise((resolve, reject) => {
         Product
@@ -26,23 +27,31 @@ controller.getAll = (query) => {
         let options = {
             include: [{ model: models.Category }],
             attributes: ['id', 'name', 'price', 'imagepath'],
-            where: {}
+            where: {
+                price: {
+                    [Op.gte]: query.min,
+                    [Op.lte]: query.max,
+
+
+                }
+            }
         }
-        if (query.category) {
+        if (query.category > 0) {
             options.where.categoryId = query.category
 
         }
-        if (query.brand) {
+        if (query.brand > 0) {
             options.where.brandId = query.brand
 
         }
-        if (query.color) {
+        if (query.color > 0) {
             options.include.push({
                 model: models.ProductColor,
                 attributes: [],
                 where: { colorId: query.color }
             })
         }
+
 
         Product
             .findAll(options)
