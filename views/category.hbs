@@ -87,20 +87,21 @@
           </div>
           <div class="sorting mr-auto">
             <select id="limit" onchange="selectParam('limit',this.value)">
+
               <option value="9">Show 9</option>
               <option value="18">Show 18</option>
               <option value="35">Show 36</option>
             </select>
           </div>
           <div>
-            <div class="input-group filter-bar-search">
-              <form action="/products" method="GET">
+            <form action="/products" method="GET">
+              <div class="input-group filter-bar-search">
                 <input type="text" name="search" placeholder="Search">
                 <div class="input-group-append">
                   <button type="submit"><i class="ti-search"></i></button>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
         <!-- End Filter Bar -->
@@ -126,6 +127,11 @@
               </div>
             </div>
             {{/each}}
+          </div>
+          <div class="row justify-content-center">
+            <nav aria-label="Page navigation example" id="pagination">
+              {{{createPaginate pagination paginationClass="pagination" }}}
+            </nav>
           </div>
         </section>
         <!-- End Best Seller -->
@@ -293,25 +299,45 @@
     sort: 'name',
     search: ''
   }
+
+
   for (let key in params) { //check luon co params on URL
     if (!urlParam.has(key)) {
       urlParam.append(key, params[key])
     }
   }
-  let checkboxes = ['category', 'brand', 'color']
 
-  for (let key in params) {
-    let control = $(`#${key}${urlParam.get(key)}`)
-    if (control) {
-      $(control).prop('checked', true)
+
+
+
+
+  $(document).ready(() => {
+    let checkboxes = ['category', 'brand', 'color']
+    for (let key in checkboxes) {
+      let control = $(`#${key}${urlParam.get(key)}`)
+      if (control) {
+        $(control).prop('checked', true)
+      }
     }
-  }
+    for (let key in params) {
+      let control = $(`#${key}${urlParam.get(key)}`)
+      if (control) {
+        $(control).prop('checked', true)
+      }
+    }
+    $('#sort').val(urlParam.get('sort'))
+    $('#limit').val(urlParam.get('limit'))
 
-  $('#sort').val(urlParam.get('sort'))
-  $('#limit').val(urlParam.get('limit'))
+    $('#pagination li').addClass('page-item')
+    $('#pagination li a').addClass('page-link')
+
+  })
+  //giữ nguyên khi lọc sản phẩm
+
 
 
   function selectParam(key, value, reset = false) {
+
     urlParam.set(key, value)
     let url = `/products?${urlParam.toString()}`
     location.href = url
@@ -322,6 +348,18 @@
 if (reset === true) {
 for (let key in params) {
 urlParam.set(key, params[key])
+}
+}
+
+
+
+
+
+
+for (let key in checkboxes) {
+let control = $(`#${key}${urlParam.get(key)}`)
+if (control) {
+$(control).prop('checked', true)
 }
 }
 

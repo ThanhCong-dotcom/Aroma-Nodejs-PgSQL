@@ -1,6 +1,7 @@
 const express = require("express");
 const expressHbs = require('express-handlebars')
 const helper = require('./controllers/helper')
+const paginateHelper = require('express-handlebars-paginate')
 require('dotenv').config()
 
 let app = express();
@@ -18,7 +19,8 @@ let hbs = expressHbs.create({
     partialsDir: __dirname + '/views/partials/',
     helpers: {
         createStarList: helper.createStarList,
-        createStar: helper.createStar
+        createStar: helper.createStar,
+        createPaginate: paginateHelper.createPagination
 
     }
 })

@@ -51,7 +51,26 @@ router.get('/', (req, res, next) => {
             return productController.getAll(req.query);
         })
         .then(data => {
-            res.locals.products = data;
+            res.locals.products = data.rows;
+            console.log(data)
+            // console.log(Math.ceil((data.length) / 5))
+            // console.log(req.query.page)
+            res.locals.pagination = {
+                page: parseInt(req.query.page),
+                limit: parseInt(req.query.limit),
+                totalRows: data.count
+            }
+            // const total = data.length
+            // const nPages = Math.ceil(total / req.query.limit)
+            // console.log(req.query.limit)
+            // const page_item = []
+            // for (let i = 0; i <= nPages; i++) {
+            //     const item = {
+            //         value: i
+            //     }
+            //     page_item.push(item)
+            // }
+
 
             res.render('category')
         })

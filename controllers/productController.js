@@ -58,6 +58,7 @@ controller.getAll = (query) => {
         if (query.limit > 0) {
             options.limit = query.limit
             options.offset = query.limit * (query.page - 1)
+
         }
         if (query.sort) {
             switch (query.sort) {
@@ -83,7 +84,7 @@ controller.getAll = (query) => {
             }
         }
         Product
-            .findAll(options)
+            .findAndCountAll(options) //=>{rows -> số dòng tìm dc,count-> tổng số dòng}
             .then(data => resolve(data))
             .catch(error => reject(new Error(error)))
     })
@@ -103,7 +104,7 @@ controller.getById = (id) => {
                 product = result;
                 return models.ProductSpecification.findAll({
                     where: { productId: id },
-                    include: [{ model: models.Specification }], raw: false, nest: true
+                    include: [{ model: models.Specification }], nest: true
                 })
             })
             .then(productSpecification => {
