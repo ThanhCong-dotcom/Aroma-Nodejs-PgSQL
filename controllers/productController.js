@@ -32,7 +32,6 @@ controller.getAll = (query) => {
                     [Op.gte]: query.min,
                     [Op.lte]: query.max,
 
-
                 }
             }
         }
@@ -51,8 +50,38 @@ controller.getAll = (query) => {
                 where: { colorId: query.color }
             })
         }
-
-
+        if (query.search != '') {
+            options.where.name = {
+                [Op.iLike]: `%${query.search}%`
+            }
+        }
+        if (query.limit > 0) {
+            options.limit = query.limit
+            options.offset = query.limit * (query.page - 1)
+        }
+        if (query.sort) {
+            switch (query.sort) {
+                case 'name':
+                    options.order = [
+                        ['name', 'ASC']
+                    ];
+                    break;
+                case 'price':
+                    options.order = [
+                        ['price', 'ASC']
+                    ];
+                    break;
+                case 'overallReview':
+                    options.order = [
+                        ['overallReview', 'ASC']
+                    ];
+                    break;
+                default:
+                    options.order = [
+                        ['name', 'ASC']
+                    ]
+            }
+        }
         Product
             .findAll(options)
             .then(data => resolve(data))
@@ -60,23 +89,6 @@ controller.getAll = (query) => {
     })
 }
 
-
-// controller.getTopProducts = () => {
-//     return new Promise((resolve, reject) => {
-//         Product
-//             .findAll(
-//                 {
-//                     include: [{ model: models.Review }],
-
-//                     attributes: ['id', 'name', 'price', 'imagepath'],
-//                     limit: 12,
-//                     // order: ['rating', 'ASC']
-//                 }
-//             )
-//             .then(data => resolve(data))
-//             .catch(error => reject(new Error(error)))
-//     })
-// }
 
 controller.getById = (id) => {
     return new Promise((resolve, reject) => {
@@ -126,22 +138,6 @@ controller.getById = (id) => {
     })
 }
 
-// controller.getByIdCategory = (id) => {
-//     return new Promise((resolve, reject) => {
-
-//         Product
-//             .findAll({
-//                 where: { id: id },
-//                 include: [{ model: models.Category }],
-
-//             })
-
-//             .then(data => {
-
-//                 resolve(data)
-//             }).catch(error => reject(new Error(error)))
-//     })
-// }
 
 
 module.exports = controller;

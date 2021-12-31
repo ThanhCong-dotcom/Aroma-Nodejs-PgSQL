@@ -27,7 +27,11 @@ controller.getAll = (query) => {
                 where: { colorId: query.color }
             }]
         }
-
+        if (query.search != '') {
+            options.include[0].where.name = {
+                [Op.iLike]: `%${query.search}%`
+            }
+        }
         Brand
             .findAll(options)
             .then(data => resolve(data))

@@ -1,18 +1,22 @@
 const controller = {}
 const models = require('../models')
 const Category = models.Category
-
-controller.getAll = () => {
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op
+controller.getAll = (query) => {
     return new Promise((resolve, reject) => {
+        let options =
+        {
+            attributes: ['id', 'name', 'imagepath', 'summary'],
+            include: [{ model: models.Product, where: {} }],
+        }
+        if (query && query.search != '') {
+            options.include[0].where.name = {
+                [Op.iLike]: `%${query.search}%`
+            }
+        }
         Category
-            .findAll(
-                {
-                    include: [{ model: models.Product }],
-                    attributes: ['id', 'name', 'imagepath', 'summary']
-
-
-                }
-            )
+            .findAll(options)
             .then(data => resolve(data))
             .catch(error => reject(new Error(error)))
     })
