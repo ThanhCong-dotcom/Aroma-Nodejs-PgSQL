@@ -2,6 +2,10 @@ const express = require("express");
 const expressHbs = require('express-handlebars')
 const helper = require('./controllers/helper')
 const paginateHelper = require('express-handlebars-paginate')
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+const session = require('express-session')
+const Cart = require('./controllers/cartController')
 require('dotenv').config()
 
 let app = express();
@@ -28,10 +32,33 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+
+
+// // Cookie-parser
+app.use(cookieParser())
+
+// // session 
+app.use(session({
+    cookie: { httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 60 * 1000 },
+    secret: 'S3cret',
+    resave: false,
+    saveUninitialized: false
+}))
+
+//Use Cart
+app.use((req, res, next) => {
+    var cart = new Cart(req.session.cart ? req.session.cart : {})
+    req.session.cart = cart;
+    res.locals.totalQuantity = cart.totalQuantity
+    next();
+})
 
 // Define route here
 app.use('/', require('./routes/indexRouter'))
 app.use('/products', require('./routes/productRouter'))
+app.use('/cart', require('./routes/cartRouter'))
 
 //generate DB
 // app.get('/sync', (req, res) => {
@@ -62,6 +89,7 @@ app.get('/:page', (req, res) => {
     res.render(page, { banner: banners[page] })
 })
 
+// Body parser
 
 
 //Set port

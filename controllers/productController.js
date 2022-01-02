@@ -26,7 +26,7 @@ controller.getAll = (query) => {
     return new Promise((resolve, reject) => {
         let options = {
             include: [{ model: models.Category }],
-            attributes: ['id', 'name', 'price', 'imagepath'],
+            attributes: ['id', 'name', 'price', 'imagepath', 'categoryId'],
             where: {
                 price: {
                     [Op.gte]: query.min,
