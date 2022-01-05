@@ -16,7 +16,7 @@ router.post('/', (req, res, next) => {
         .getById(productId)
         .then(product => {
             var cartItem = req.session.cart.add(product, productId, quantity)
-            console.log(cartItem)
+
             res.json(cartItem);
 
         })

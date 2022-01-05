@@ -27,10 +27,10 @@
     <!--================ Hero Carousel start =================-->
     <section class="section-margin mt-0">
         <div class="owl-carousel owl-theme hero-carousel">
-            {{#each this.categories}}
+            {{#each categories}}
             <div class="hero-carousel__slide">
                 <img src="{{imagepath}}" alt="" class="img-fluid">
-                <a href="/products?category{{id}}" class="hero-carousel__slideOverlay">
+                <a href="/products?category={{id}}" class="hero-carousel__slideOverlay">
                     <h3>{{name}}</h3>
                     <p>{{summary}}</p>
                 </a>

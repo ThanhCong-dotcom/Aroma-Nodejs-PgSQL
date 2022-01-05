@@ -11,10 +11,9 @@ function addToCart() {
         type: 'POST',
         data: { id, quantity },
         success: function (result) {
-
-            if ($('#cart-badge').html(result.totalQuantity)) {
-                alert('thêm thành công')
-
+            if (result.totalQuantity > 0) {
+                $('#cart-badge').html(result.totalQuantity);
+                //alert('thêm vào giỏ thành công')
             }
 
         }
