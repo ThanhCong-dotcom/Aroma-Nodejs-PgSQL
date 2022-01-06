@@ -80,16 +80,20 @@ router.get('/', (req, res, next) => {
 
 
 
-router.get('/:id', (req, res) => {
+router.get('/:id', (req, res, next) => {
     let productController = require('../controllers/productController')
     productController
         .getById(req.params.id)
         .then(product => {
             res.locals.products = product
-            // console.log(product)
+            let reviewController = require('../controllers/reviewController')
+            return reviewController.getUerPreviewProduct(1, req.params.id)
+        })
+        .then(review => {
+            res.locals.userReview = review
             res.render('single-product')
 
-        })
+        }).catch(error => next(error));
 })
 
 
