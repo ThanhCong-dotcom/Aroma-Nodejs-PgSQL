@@ -1,11 +1,12 @@
 const express = require('express')
 const router = express.Router();
+const midleware = require('../middleware/isLoggedIn')
 
 
-router.post('/', (req, res, next) => {
+router.post('/', midleware.isLoggedIn, (req, res, next) => {
     let reviewController = require('../controllers/reviewController')
     let review = {
-        userId: 1,
+        userId: req.session.user.id,
         productId: req.body.productId,
         rating: req.body.rating,
         message: req.body.message

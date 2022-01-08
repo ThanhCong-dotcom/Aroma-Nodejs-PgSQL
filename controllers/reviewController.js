@@ -57,7 +57,7 @@ controller.add = (review) => {
     })
 }
 
-controller.getUerPreviewProduct = (userId, productId) => {
+controller.getUserPreviewProduct = (userId, productId) => {
     return Review.findOne({
         where: {
             userId, productId

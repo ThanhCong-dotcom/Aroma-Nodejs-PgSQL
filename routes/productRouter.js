@@ -1,4 +1,4 @@
-const { query } = require('express');
+
 const express = require('express')
 const router = express.Router();
 
@@ -87,7 +87,7 @@ router.get('/:id', (req, res, next) => {
         .then(product => {
             res.locals.products = product
             let reviewController = require('../controllers/reviewController')
-            return reviewController.getUerPreviewProduct(1, req.params.id)
+            return reviewController.getUserPreviewProduct(req.session.user ? req.session.user.id : 0, req.params.id)
         })
         .then(review => {
             res.locals.userReview = review
